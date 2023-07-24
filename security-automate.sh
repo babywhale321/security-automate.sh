@@ -25,10 +25,8 @@ bantime="48h"
 maxretry="3"
 
 #UFW
-#example = ufw_command="ufw limit 22 ; ufw deny 80 ; ufw allow 443"
-ufw_command="ufw limit 22"
-
-
+#example = ufw_command="ufw allow 22 && ufw limit 80 && ufw allow 443"
+ufw_command="ufw allow 22"
 
 #!!!!!!!!!!!!!!NOT intended to be changed pass this line!!!!!!!!!!!!!!!!!
 
@@ -94,11 +92,11 @@ echo findtime=$findtime >> $fail2banconfig
 echo bantime=$bantime >> $fail2banconfig
 echo maxretry=$maxretry >> $fail2banconfig
 
-#ufw add rules then enable rules
-apt install ufw
-$ufw_command
-ufw enable
-ufw reload
+#ufw add rules then reload / enable rules
+apt install ufw -y
+eval "$ufw_command"
+echo "y" | ufw reload
+echo "y" | ufw enable
 
 #enable services then restart services
 systemctl enable fail2ban
